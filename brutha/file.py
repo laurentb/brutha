@@ -3,7 +3,18 @@
 import os
 import re
 from time import localtime
+from datetime import datetime
+
 from .util import escape
+
+
+def mtime(path):
+    """
+    Get a comparable modification time for a file.
+    None if it does not exist.
+    """
+    if os.path.exists(path):
+        return int(datetime.fromtimestamp(os.path.getmtime(path)).strftime('%Y%m%d%H%M%s'))
 
 
 class File(object):
@@ -30,6 +41,8 @@ class File(object):
     def dest(self):
         return os.path.join(self.destpath, self.destname)
 
+    def uptodate(self):
+        return mtime(self.src()) == mtime(self.dest())
 
 class FlacFile(File):
     PATTERN = re.compile(r'\.flac$', flags=re.IGNORECASE)
@@ -40,8 +53,9 @@ class FlacFile(File):
 
     def commands(self):
         commands = []
-        self.transcode(commands)
-        self.touch(commands)
+        if not self.uptodate():
+            self.transcode(commands)
+            self.touch(commands)
         return commands
 
     def transcode(self, commands):
@@ -55,8 +69,9 @@ class LossyFile(File):
 
     def commands(self):
         commands = []
-        self.copy(commands)
-        self.touch(commands)
+        if not self.uptodate():
+            self.copy(commands)
+            self.touch(commands)
         return commands
 
     def copy(self, commands):

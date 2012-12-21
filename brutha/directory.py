@@ -33,7 +33,8 @@ class Directory(object):
         if not any(flacs + mp3s + oggs):
             raise NotInteresting("No sound files")
 
-        commands.append(self.mkdir_command())
+        if not os.path.isdir(self.destpath):
+            commands.append(self.mkdir_command())
         for flac in flacs:
             f = FlacFile(self.path, self.destpath, flac)
             commands.append(f.commands())
