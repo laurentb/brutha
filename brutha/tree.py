@@ -17,7 +17,10 @@ class Tree(object):
         commands = []
         for root, dirs, files in os.walk(self.path, followlinks=True):
             relpath = os.path.relpath(root, self.path)
-            destpath = os.path.join(self.destpath, relpath)
+            if relpath != '.':
+                destpath = os.path.join(self.destpath, relpath)
+            else:
+                destpath = self.destpath
             try:
                 d = Directory(root, destpath, self.options, _files=files)
                 commands.append(d.commands())
