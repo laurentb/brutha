@@ -32,7 +32,7 @@ class File(object):
 
 
 class FlacFile(File):
-    PATTERN = re.compile(r'\.flac$')
+    PATTERN = re.compile(r'\.flac$', flags=re.IGNORECASE)
 
     def __init__(self, path, destpath, name):
         File.__init__(self, path, destpath, name)

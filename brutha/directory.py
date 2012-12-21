@@ -58,6 +58,6 @@ class Directory(object):
         return self.files('ogg')
 
     def files(self, ext):
-        pattern = re.compile(r'\.%s$' % re.escape(ext))
+        pattern = re.compile(r'\.%s$' % re.escape(ext), flags=re.IGNORECASE)
 
         return [f for f in self._files if pattern.search(f)]
