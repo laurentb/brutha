@@ -3,6 +3,7 @@
 import os
 import re
 from time import localtime
+from .util import escape
 
 
 class File(object):
@@ -21,7 +22,7 @@ class File(object):
                 str(i.tm_mon).zfill(2), str(i.tm_mday).zfill(2),
                 str(i.tm_hour).zfill(2), str(i.tm_min).zfill(2),
                 str(i.tm_sec).zfill(2))
-        commands.append("touch -t%s -c -m '%s'" % (stamp, self.dest()))
+        commands.append("touch -t%s -c -m %s" % (stamp, escape(self.dest())))
 
     def src(self):
         return os.path.join(self.path, self.name)
@@ -44,7 +45,7 @@ class FlacFile(File):
         return commands
 
     def transcode(self, commands):
-        commands.append("oggenc -q8 '%s' -o '%s'" % (self.src(), self.dest()))
+        commands.append("oggenc -q8 %s -o %s" % (escape(self.src()), escape(self.dest())))
 
 
 class LossyFile(File):
@@ -59,4 +60,4 @@ class LossyFile(File):
         return commands
 
     def copy(self, commands):
-        commands.append("cp -v '%s' '%s'" % (self.src(), self.dest()))
+        commands.append("cp -v %s %s" % (escape(self.src()), escape(self.dest())))

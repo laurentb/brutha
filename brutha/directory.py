@@ -4,6 +4,7 @@ import re
 import os
 
 from .file import FlacFile, LossyFile
+from .util import escape
 
 
 class NotInteresting(Exception):
@@ -45,7 +46,7 @@ class Directory(object):
         return commands
 
     def mkdir_command(self):
-        return 'mkdir -pv %s' % os.path.join(self.destpath)
+        return 'mkdir -pv %s' % escape(os.path.join(self.destpath))
 
     def flacs(self):
         return self.files('flac')
