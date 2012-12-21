@@ -36,13 +36,13 @@ class Directory(object):
         if not os.path.isdir(self.destpath):
             commands.append(self.mkdir_command())
         for flac in flacs:
-            f = FlacFile(self.path, self.destpath, flac)
+            f = FlacFile(self.path, self.destpath, flac, self.options)
             commands.append(f.commands())
         for mp3 in mp3s:
-            f = LossyFile(self.path, self.destpath, mp3)
+            f = LossyFile(self.path, self.destpath, mp3, self.options)
             commands.append(f.commands())
         for ogg in oggs:
-            f = LossyFile(self.path, self.destpath, ogg)
+            f = LossyFile(self.path, self.destpath, ogg, self.options)
             commands.append(f.commands())
         return commands
 

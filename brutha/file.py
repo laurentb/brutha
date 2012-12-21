@@ -18,10 +18,11 @@ def mtime(path):
 
 
 class File(object):
-    def __init__(self, path, destpath, name):
+    def __init__(self, path, destpath, name, options):
         self.path = path
         self.destpath = destpath
         self.name = name
+        self.options = options
 
     def commands(self):
         raise NotImplementedError()
@@ -44,11 +45,12 @@ class File(object):
     def uptodate(self):
         return mtime(self.src()) == mtime(self.dest())
 
+
 class FlacFile(File):
     PATTERN = re.compile(r'\.flac$', flags=re.IGNORECASE)
 
-    def __init__(self, path, destpath, name):
-        File.__init__(self, path, destpath, name)
+    def __init__(self, path, destpath, name, options):
+        File.__init__(self, path, destpath, name, options)
         self.destname = self.PATTERN.sub('.ogg', self.name)
 
     def commands(self):
@@ -59,12 +61,13 @@ class FlacFile(File):
         return commands
 
     def transcode(self, commands):
-        commands.append("oggenc -q8 %s -o %s" % (escape(self.src()), escape(self.dest())))
+        commands.append("oggenc -q%s %s -o %s" %
+                        (self.options['quality'], escape(self.src()), escape(self.dest())))
 
 
 class LossyFile(File):
-    def __init__(self, path, destpath, name):
-        File.__init__(self, path, destpath, name)
+    def __init__(self, path, destpath, name, options):
+        File.__init__(self, path, destpath, name, options)
         self.destname = self.name
 
     def commands(self):
