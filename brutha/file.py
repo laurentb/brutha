@@ -17,9 +17,9 @@ class File(object):
     def touch(self, commands):
         mtime = os.path.getmtime(self.src())
         i = localtime(mtime)
-        stamp = "%s%s%s%s%s.%s" % (str(i.tm_year).zfill(4), \
-                str(i.tm_mon).zfill(2), str(i.tm_mday).zfill(2), \
-                str(i.tm_hour).zfill(2), str(i.tm_min).zfill(2), \
+        stamp = "%s%s%s%s%s.%s" % (str(i.tm_year).zfill(4),
+                str(i.tm_mon).zfill(2), str(i.tm_mday).zfill(2),
+                str(i.tm_hour).zfill(2), str(i.tm_min).zfill(2),
                 str(i.tm_sec).zfill(2))
         commands.append("touch -t%s -c -m '%s'" % (stamp, self.dest()))
 
@@ -44,8 +44,7 @@ class FlacFile(File):
         return commands
 
     def transcode(self, commands):
-        commands.append("oggenc -q8 '%s' -o '%s'" % \
-                (self.src(), self.dest()))
+        commands.append("oggenc -q8 '%s' -o '%s'" % (self.src(), self.dest()))
 
 
 class LossyFile(File):
@@ -60,5 +59,4 @@ class LossyFile(File):
         return commands
 
     def copy(self, commands):
-        commands.append("cp -v '%s' '%s'" % \
-                (self.src(), self.dest()))
+        commands.append("cp -v '%s' '%s'" % (self.src(), self.dest()))
