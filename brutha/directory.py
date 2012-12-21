@@ -35,19 +35,27 @@ class Directory(object):
 
         if not os.path.isdir(self.destpath):
             commands.append(self.mkdir_command())
+
+        files = []
         for flac in flacs:
-            f = FlacFile(self.path, self.destpath, flac, self.options)
-            commands.append(f.commands())
+            files.append(FlacFile(self.path, self.destpath, flac, self.options))
         for mp3 in mp3s:
-            f = LossyFile(self.path, self.destpath, mp3, self.options)
-            commands.append(f.commands())
+            files.append(LossyFile(self.path, self.destpath, mp3, self.options))
         for ogg in oggs:
-            f = LossyFile(self.path, self.destpath, ogg, self.options)
-            commands.append(f.commands())
+            files.append(LossyFile(self.path, self.destpath, ogg, self.options))
+        for f in files:
+            commands.append(f.pre())
+        if not all([f.uptodate() for f in files]) and self.options['gain']:
+            commands.append(self.vorbisgain())
+        for f in files:
+            commands.append(f.post())
         return commands
 
     def mkdir_command(self):
         return 'mkdir -pv %s' % escape(os.path.join(self.destpath))
+
+    def vorbisgain(self):
+        return 'vorbisgain -s -f -a %s' % escape(os.path.join(self.destpath))
 
     def flacs(self):
         return self.files('flac')

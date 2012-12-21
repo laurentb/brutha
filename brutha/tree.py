@@ -9,7 +9,7 @@ class Tree(object):
         assert os.path.isdir(path)
         self.path = path
         self.destpath = destpath
-        self.options = {'quality': 8}
+        self.options = {'quality': 8, 'gain': False}
         if options:
             self.options.update(options)
 

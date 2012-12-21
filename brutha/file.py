@@ -24,8 +24,14 @@ class File(object):
         self.name = name
         self.options = options
 
-    def commands(self):
+    def pre(self):
         raise NotImplementedError()
+
+    def post(self):
+        commands = []
+        if not self.uptodate():
+            self.touch(commands)
+        return commands
 
     def touch(self, commands):
         mtime = os.path.getmtime(self.src())
@@ -53,11 +59,10 @@ class FlacFile(File):
         File.__init__(self, path, destpath, name, options)
         self.destname = self.PATTERN.sub('.ogg', self.name)
 
-    def commands(self):
+    def pre(self):
         commands = []
         if not self.uptodate():
             self.transcode(commands)
-            self.touch(commands)
         return commands
 
     def transcode(self, commands):
@@ -70,11 +75,10 @@ class LossyFile(File):
         File.__init__(self, path, destpath, name, options)
         self.destname = self.name
 
-    def commands(self):
+    def pre(self):
         commands = []
         if not self.uptodate():
             self.copy(commands)
-            self.touch(commands)
         return commands
 
     def copy(self, commands):
