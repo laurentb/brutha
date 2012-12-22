@@ -24,6 +24,9 @@ class File(object):
         self.name = name
         self.options = options
 
+    def destname(self):
+        raise NotImplementedError()
+
     def pre(self):
         raise NotImplementedError()
 
@@ -46,7 +49,7 @@ class File(object):
         return os.path.join(self.path, self.name)
 
     def dest(self):
-        return os.path.join(self.destpath, self.destname)
+        return os.path.join(self.destpath, self.destname())
 
     def uptodate(self):
         return mtime(self.src()) == mtime(self.dest())
@@ -55,9 +58,8 @@ class File(object):
 class FlacFile(File):
     PATTERN = re.compile(r'\.flac$', flags=re.IGNORECASE)
 
-    def __init__(self, path, destpath, name, options):
-        File.__init__(self, path, destpath, name, options)
-        self.destname = self.PATTERN.sub('.ogg', self.name)
+    def destname(self):
+        return self.PATTERN.sub('.ogg', self.name)
 
     def pre(self):
         commands = []
@@ -71,9 +73,8 @@ class FlacFile(File):
 
 
 class LossyFile(File):
-    def __init__(self, path, destpath, name, options):
-        File.__init__(self, path, destpath, name, options)
-        self.destname = self.name
+    def destname(self):
+        return self.name
 
     def pre(self):
         commands = []

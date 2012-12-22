@@ -15,8 +15,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-q', '--quality', default=8, type=int)
     parser.add_argument('-g', '--gain', action='store_true')
+    parser.add_argument('-d', '--delete', action='store_true')
     parser.add_argument('src')
     parser.add_argument('dest')
     args = parser.parse_args()
-    d = Tree(args.src, args.dest, {'quality': args.quality, 'gain': args.gain})
+    d = Tree(args.src, args.dest,
+             {'quality': args.quality, 'gain': args.gain, 'delete': args.delete})
     printall(d.commands())
