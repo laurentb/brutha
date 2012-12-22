@@ -32,14 +32,14 @@ class Directory(object):
             raise NotInteresting("No sound files")
 
         if not os.path.isdir(self.destpath):
-            commands.append(self.mkdir_command())
+            commands.append(self.mkdir())
 
         for f in files:
-            commands.append(f.pre())
+            commands.extend(f.pre())
         if not all([f.uptodate() for f in files]) and self.options['gain']:
-            commands.append(self.vorbisgain())
+            commands.extend(self.vorbisgain())
         for f in files:
-            commands.append(f.post())
+            commands.extend(f.post())
         return commands
 
     def wanted(self):
@@ -58,7 +58,7 @@ class Directory(object):
         for ogg in oggs:
             yield LossyFile(self.path, self.destpath, ogg, self.options)
 
-    def mkdir_command(self):
+    def mkdir(self):
         return 'mkdir -pv %s' % escape(os.path.join(self.destpath))
 
     def vorbisgain(self):
