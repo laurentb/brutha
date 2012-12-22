@@ -10,6 +10,11 @@ def sh(commands):
     print "\n\n".join(["\n".join(subcommands) for subcommands in commands])
 
 
+def parallel(commands):
+    print '#!/usr/bin/parallel --shebang --verbose'
+    print "\n".join([" && ".join(subcommands) for subcommands in commands])
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-q', '--quality', default=8, type=int)
@@ -21,5 +26,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     tree = Tree(args.src, args.dest,
                 {'quality': args.quality, 'gain': args.gain, 'delete': args.delete})
-    printers = {'sh': sh}
+    printers = {'sh': sh, 'parallel': parallel}
     printers[args.output](tree.commands())
