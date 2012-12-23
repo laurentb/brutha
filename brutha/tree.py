@@ -25,7 +25,9 @@ class Tree(object):
                 destpath = self.destpath
             try:
                 d = Directory(root, destpath, self.options, _files=files)
-                commands.append(d.commands())
+                c = d.commands()
+                if c:
+                    commands.append(c)
                 wanted.extend(d.wanted())
             except NotInteresting:
                 pass
