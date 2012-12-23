@@ -15,6 +15,17 @@ def parallel(commands):
     print "\n".join([" && ".join(subcommands) for subcommands in commands])
 
 
+def makefile(commands):
+    targets = ' '.join('d%s' % i for i in xrange(0, len(commands)))
+    print '.PHONY: all %s' % targets
+    print 'all: %s' % targets
+    print
+    for i, subcommands in enumerate(commands):
+        print 'd%s:' % i
+        for subcommand in subcommands:
+            print '\t%s' % subcommand
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-q', '--quality', default=8, type=int)
@@ -26,5 +37,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     tree = Tree(args.src, args.dest,
                 {'quality': args.quality, 'gain': args.gain, 'delete': args.delete})
-    printers = {'sh': sh, 'parallel': parallel}
+    printers = {'sh': sh, 'parallel': parallel, 'makefile': makefile}
     printers[args.output](tree.commands())
