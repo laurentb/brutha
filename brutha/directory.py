@@ -37,7 +37,7 @@ class Directory(object):
         for f in files:
             commands.extend(f.pre())
         if not all([f.uptodate() for f in files]) and self.options['gain']:
-            commands.extend(self.vorbisgain())
+            commands.append(self.vorbisgain())
         for f in files:
             commands.extend(f.post())
         return commands

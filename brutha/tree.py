@@ -33,7 +33,9 @@ class Tree(object):
             except NotInteresting:
                 pass
         if self.options['delete']:
-            commands.extend(self.delete(wanted))
+            c = list(self.delete(wanted))
+            if c:
+                commands.append(c)
         return commands
 
     def delete(self, wanted):
