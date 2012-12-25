@@ -32,10 +32,13 @@ if __name__ == '__main__':
     parser.add_argument('-g', '--gain', action='store_true')
     parser.add_argument('-d', '--delete', action='store_true')
     parser.add_argument('-o', '--output', default='sh')
+    parser.add_argument('-R', '--maxrate', type=int)
+    parser.add_argument('-B', '--maxbits', type=int)
     parser.add_argument('src')
     parser.add_argument('dest')
     args = parser.parse_args()
     tree = Tree(args.src, args.dest,
-                {'quality': args.quality, 'gain': args.gain, 'delete': args.delete})
+                {'quality': args.quality, 'gain': args.gain, 'delete': args.delete,
+                 'maxrate': args.maxrate, 'maxbits': args.maxbits})
     printers = {'sh': sh, 'parallel': parallel, 'makefile': makefile}
     printers[args.output](tree.commands())

@@ -5,6 +5,8 @@ import re
 from time import localtime
 from datetime import datetime
 
+import mutagen
+
 from .util import escape
 
 
@@ -67,9 +69,20 @@ class FlacFile(File):
             self.transcode(commands)
         return commands
 
+    def resample(self):
+        rate = bits = ''
+        if self.options['maxrate'] or self.options['maxbits']:
+            f = mutagen.File(self.src())
+            if self.options['maxrate'] and f.info.sample_rate > self.options['maxrate']:
+                rate = ' rate -v -L %s dither' % self.options['maxrate']
+            if self.options['maxbits'] and f.info.bits_per_sample > self.options['maxbits']:
+                bits = ' -b %s' % self.options['maxbits']
+        return (rate, bits)
+
     def transcode(self, commands):
-        commands.append("oggenc -q%s %s -o %s" %
-                        (self.options['quality'], escape(self.src()), escape(self.dest())))
+        rate, bits = self.resample()
+        commands.append('sox -S %s -C %s%s %s%s' %
+                        (escape(self.src()), self.options['quality'], bits, escape(self.dest()), rate))
 
 
 class LossyFile(File):
