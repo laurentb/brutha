@@ -6,7 +6,7 @@ import argparse
 
 def sh(commands):
     print '#!/bin/sh'
-    print 'set +xeu'
+    print 'set -xeu'
     print "\n\n".join(["\n".join(subcommands) for subcommands in commands])
 
 

@@ -62,7 +62,7 @@ class Directory(object):
         return 'mkdir -pv %s' % escape(os.path.join(self.destpath))
 
     def vorbisgain(self):
-        return 'vorbisgain -s -f -a %s' % escape(os.path.join(self.destpath))
+        return 'vorbisgain -q -s -f -a %s' % escape(os.path.join(self.destpath))
 
     def flacs(self):
         return self.type_files('flac')
