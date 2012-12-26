@@ -22,22 +22,28 @@ def pbar(cur, total, color=True):
     return "echo '%s[%s] (%s%%)%s'" % (BRIGHT, bar, pct, NORMAL)
 
 
-def sh(commands):
+def sh(commands, echo=False):
     print '#!/bin/sh'
-    print 'set -xeu'
+    print 'set -eu'
+    if echo:
+        print 'set -x'
     for i, subcommands in enumerate(commands):
         print "\n".join(subcommands)
-        print '( set +x ; %s ) 2>/dev/null' % pbar(i+1, len(commands))
+        if echo:
+            print '( set +x ; %s ) 2>/dev/null' % pbar(i+1, len(commands))
+        else:
+            print pbar(i+1, len(commands))
         print
 
 
-def parallel(commands):
-    print '#!/usr/bin/parallel --shebang --verbose'
+def parallel(commands, echo=False):
+    print '#!/usr/bin/parallel --shebang%s --' % (' --verbose' if echo else '')
     for i, subcommands in enumerate(commands):
         print " && ".join(subcommands + [pbar(i+1, len(commands))])
 
 
-def make(commands):
+def make(commands, echo=False):
+    prefix = '' if echo else '@'
     targets = ' '.join('d%s' % i for i in xrange(0, len(commands)))
     print '.PHONY: all %s' % targets
     print 'all: %s' % targets
@@ -45,7 +51,7 @@ def make(commands):
     for i, subcommands in enumerate(commands):
         print 'd%s:' % i
         for subcommand in subcommands:
-            print '\t%s' % subcommand
+            print '\t%s%s' % (prefix, subcommand)
         print '\t@%s' % pbar(i+1, len(commands))
 
 
@@ -66,6 +72,8 @@ if __name__ == '__main__':
                         help='Maximum sample rate allowed (e.g. 44100)', metavar='RATE')
     parser.add_argument('-B', '--maxbits', type=int,
                         help='Maximum bit depth allowed (e.g. 16)', metavar='BITS')
+    parser.add_argument('-e', '--echo', action='store_true',
+                        help='Show started commands')
     parser.add_argument('src', help='Source directory', metavar='SOURCE')
     parser.add_argument('dest', help='Destination directory', metavar='DESTINATION')
     args = parser.parse_args()
@@ -73,4 +81,4 @@ if __name__ == '__main__':
     tree = Tree(args.src, args.dest,
                 {'quality': args.quality, 'gain': args.gain, 'delete': args.delete,
                  'maxrate': args.maxrate, 'maxbits': args.maxbits})
-    printers[args.output](tree.commands())
+    printers[args.output](tree.commands(), echo=args.echo)
