@@ -6,14 +6,20 @@ from brutha.tree import Tree
 import argparse
 
 
-def pbar(cur, total):
+def pbar(cur, total, color=True):
+    if color:
+        BRIGHT = '\x1b[1m'
+        NORMAL = '\x1b[22m'
+    else:
+        BRIGHT = ''
+        NORMAL = ''
     if total == 0:
         pct = 100
     else:
         pct = int(100 * cur / total)
 
     bar = (int(pct/10) * '#') + (int(10-pct/10) * ' ')
-    return "echo '[%s] (%s%%)'" % (bar, pct)
+    return "echo '%s[%s] (%s%%)%s'" % (BRIGHT, bar, pct, NORMAL)
 
 
 def sh(commands):
@@ -21,7 +27,7 @@ def sh(commands):
     print 'set -xeu'
     for i, subcommands in enumerate(commands):
         print "\n".join(subcommands)
-        print pbar(i+1, len(commands))
+        print '( set +x ; %s ) 2>/dev/null' % pbar(i+1, len(commands))
         print
 
 
@@ -40,7 +46,7 @@ def make(commands):
         print 'd%s:' % i
         for subcommand in subcommands:
             print '\t%s' % subcommand
-        print '\t%s' % pbar(i+1, len(commands))
+        print '\t@%s' % pbar(i+1, len(commands))
 
 
 if __name__ == '__main__':
