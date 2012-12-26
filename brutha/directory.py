@@ -3,8 +3,8 @@
 import re
 import os
 
-from .file import FlacFile, LossyFile
-from .util import escape
+from brutha.file import FlacFile, LossyFile
+from brutha.util import escape
 
 
 class NotInteresting(Exception):

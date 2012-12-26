@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import division
-
 import argparse
 import sys
 
@@ -10,7 +8,7 @@ from brutha.util import uprint
 from brutha.output import PRINTERS
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(
         description='Sync FLAC music files to Ogg Vorbis (or keep lossy as-is).')
     parser.add_argument('-q', '--quality', default=8, type=int,
@@ -37,3 +35,6 @@ if __name__ == '__main__':
     p = uprint(sys.stdout)
     outf = PRINTERS[args.output]
     outf(p, tree.commands(), args.echo)
+
+if __name__ == '__main__':
+    main()

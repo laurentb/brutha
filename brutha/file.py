@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import os
 import re
 from time import localtime
@@ -7,7 +6,7 @@ from datetime import datetime
 
 import mutagen
 
-from .util import escape
+from brutha.util import escape
 
 
 def mtime(path):

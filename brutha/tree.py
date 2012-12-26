@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from .directory import Directory, NotInteresting
-from .util import escape
+from brutha.directory import Directory, NotInteresting
+from brutha.util import escape
 
 
 class Tree(object):
