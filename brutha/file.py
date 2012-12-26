@@ -96,4 +96,4 @@ class LossyFile(File):
         return commands
 
     def copy(self, commands):
-        commands.append("cp -v %s %s" % (escape(self.src()), escape(self.dest())))
+        commands.append("cp %s %s" % (escape(self.src()), escape(self.dest())))

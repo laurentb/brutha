@@ -59,7 +59,7 @@ class Directory(object):
             yield LossyFile(self.path, self.destpath, ogg, self.options)
 
     def mkdir(self):
-        return 'mkdir -pv %s' % escape(os.path.join(self.destpath))
+        return 'mkdir -p %s' % escape(os.path.join(self.destpath))
 
     def vorbisgain(self):
         return 'vorbisgain -q -s -f -a %s' % escape(os.path.join(self.destpath))
