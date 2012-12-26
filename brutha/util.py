@@ -11,3 +11,9 @@ def escape(x):
         s = s + c
     s = s + '"'
     return s
+
+
+def uprint(stream):
+    def p(text='', end='\n'):
+        stream.write(text + end)
+    return p

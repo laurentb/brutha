@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
-from brutha.tree import Tree
 import argparse
+import sys
+
+from brutha.tree import Tree
+from brutha.util import uprint
 
 
 def pbar(cur, total, color=True):
@@ -22,37 +25,37 @@ def pbar(cur, total, color=True):
     return "echo '%s[%s] (%s%%)%s'" % (BRIGHT, bar, pct, NORMAL)
 
 
-def sh(commands, echo=False):
-    print '#!/bin/sh'
-    print 'set -eu'
+def sh(p, commands, echo=False):
+    p('#!/bin/sh')
+    p('set -eu')
     if echo:
-        print 'set -x'
+        p('set -x')
     for i, subcommands in enumerate(commands):
-        print "\n".join(subcommands)
+        p("\n".join(subcommands))
         if echo:
-            print '( set +x ; %s ) 2>/dev/null' % pbar(i+1, len(commands))
+            p('( set +x ; %s ) 2>/dev/null' % pbar(i+1, len(commands)))
         else:
-            print pbar(i+1, len(commands))
-        print
+            p(pbar(i+1, len(commands)))
+        p()
 
 
-def parallel(commands, echo=False):
-    print '#!/usr/bin/parallel --shebang%s --' % (' --verbose' if echo else '')
+def parallel(p, commands, echo=False):
+    p('#!/usr/bin/parallel --shebang%s --' % (' --verbose' if echo else ''))
     for i, subcommands in enumerate(commands):
-        print " && ".join(subcommands + [pbar(i+1, len(commands))])
+        p(" && ".join(subcommands + [pbar(i+1, len(commands))]))
 
 
-def make(commands, echo=False):
+def make(p, commands, echo=False):
     prefix = '' if echo else '@'
     targets = ' '.join('d%s' % i for i in xrange(0, len(commands)))
-    print '.PHONY: all %s' % targets
-    print 'all: %s' % targets
-    print
+    p('.PHONY: all %s' % targets)
+    p('all: %s' % targets)
+    p()
     for i, subcommands in enumerate(commands):
-        print 'd%s:' % i
+        p('d%s:' % i)
         for subcommand in subcommands:
-            print '\t%s%s' % (prefix, subcommand)
-        print '\t@%s' % pbar(i+1, len(commands))
+            p('\t%s%s' % (prefix, subcommand))
+        p('\t@%s' % pbar(i+1, len(commands)))
 
 
 if __name__ == '__main__':
@@ -81,4 +84,5 @@ if __name__ == '__main__':
     tree = Tree(args.src, args.dest,
                 {'quality': args.quality, 'gain': args.gain, 'delete': args.delete,
                  'maxrate': args.maxrate, 'maxbits': args.maxbits})
-    printers[args.output](tree.commands(), echo=args.echo)
+    p = uprint(sys.stdout)
+    printers[args.output](p, tree.commands(), args.echo)
