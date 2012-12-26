@@ -19,8 +19,8 @@ if __name__ == '__main__':
                         help='Compute ReplayGain if missing')
     parser.add_argument('-d', '--delete', action='store_true',
                         help='Delete extraneous files in destination')
-    parser.add_argument('-o', '--output', default='sh',
-                        help='Command list type (%s), default sh' % ', '.join(PRINTERS.keys()))
+    parser.add_argument('-o', '--output', default='sh', choices=PRINTERS.keys(),
+                        help='Command list type, default sh')
     parser.add_argument('-R', '--maxrate', type=int,
                         help='Maximum sample rate allowed (e.g. 44100)', metavar='RATE')
     parser.add_argument('-B', '--maxbits', type=int,
