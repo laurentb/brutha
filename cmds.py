@@ -1,18 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import division
+
 from brutha.tree import Tree
 import argparse
+
+
+def pbar(cur, total):
+    if total == 0:
+        pct = 100
+    else:
+        pct = int(100 * cur / total)
+
+    bar = (int(pct/10) * '#') + (int(10-pct/10) * ' ')
+    return "echo '[%s] (%s%%)'" % (bar, pct)
 
 
 def sh(commands):
     print '#!/bin/sh'
     print 'set -xeu'
-    print "\n\n".join(["\n".join(subcommands) for subcommands in commands])
+    for i, subcommands in enumerate(commands):
+        print "\n".join(subcommands)
+        print pbar(i+1, len(commands))
+        print
 
 
 def parallel(commands):
     print '#!/usr/bin/parallel --shebang --verbose'
-    print "\n".join([" && ".join(subcommands) for subcommands in commands])
+    for i, subcommands in enumerate(commands):
+        print " && ".join(subcommands + [pbar(i+1, len(commands))])
 
 
 def make(commands):
@@ -24,6 +40,7 @@ def make(commands):
         print 'd%s:' % i
         for subcommand in subcommands:
             print '\t%s' % subcommand
+        print '\t%s' % pbar(i+1, len(commands))
 
 
 if __name__ == '__main__':
