@@ -38,7 +38,7 @@ who want to convert their huge collections to more portable destinations,
 with the highest quality/size ratio in mind.
 
 `brutha` is very simple and rests on the shoulders on giants:
-FLAC, Ogg Vorbis, sox, Python, GNU Make, GNU Parallel, Bash, etc.
+FLAC, Ogg Vorbis, sox, Python, mutagen, GNU Make, GNU Parallel, Bash, etc.
 
 
 Requirements
@@ -52,8 +52,8 @@ without issues except lower performance.
 Software requirements
 ~~~~~~~~~~~~~~~~~~~~~
 
-* Python 2 or Python 3 (with 2to3 or setup.py), Python 2 being the main version for now
-* python-argparse (or Python >2.7 / >3.1)
+* Python 2 (2.6 or later)
+* python-argparse (or Python 2.7 or later)
 * `python-mutagen <http://pypi.python.org/pypi/mutagen>`_
 * `sox <http://sox.sourceforge.net/>`_
 * for parallel runs, either `GNU make <http://www.gnu.org/software/make/make.html>`_
@@ -97,6 +97,7 @@ Future
 ------
 
 `brutha` is considered feature-complete.
+Python 3 support is waiting for mutagen.
 
 This might be interesting for some users, but is not planned:
 
