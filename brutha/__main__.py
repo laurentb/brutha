@@ -5,8 +5,8 @@ import sys
 from StringIO import StringIO
 
 from brutha.tree import Tree
-from brutha.util import uprint, detect_cores, default_output
-from brutha.output import PRINTERS, EXECUTORS
+from brutha.util import detect_cores, default_output
+from brutha.output import OUTPUTS
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
                         help='Compute ReplayGain if missing')
     parser.add_argument('-d', '--delete', action='store_true',
                         help='Delete extraneous files in destination')
-    parser.add_argument('-o', '--output', default=output, choices=PRINTERS.keys(),
+    parser.add_argument('-o', '--output', default=output, choices=OUTPUTS.keys(),
                         help='Command list type, default %s' % output)
     parser.add_argument('-R', '--maxrate', type=int,
                         help='Maximum sample rate allowed (e.g. 44100)', metavar='RATE')
@@ -43,18 +43,16 @@ def main():
                 {'quality': args.quality, 'gain': args.gain, 'delete': args.delete,
                  'maxrate': args.maxrate, 'maxbits': args.maxbits, 'lossycheck': args.lossycheck})
     if args.execute:
-        s = StringIO()
-        p = uprint(s)
+        stream = StringIO()
     else:
-        p = uprint(sys.stdout)
-    outf = PRINTERS[args.output]
-    outf(p, tree.commands(), args.echo, args.jobs)
+        stream = sys.stdout
+    jobs = args.jobs if args.output in ('parallel', 'make') else 1
+    out = OUTPUTS[args.output](args.echo, jobs)
+    out.write(tree.commands(), stream)
 
     if args.execute:
-        jobs = args.jobs if args.output in ('parallel', 'make') else 1
         print >>sys.stderr, 'Synchronizing %s to %s, using %s concurrent jobs.' % (args.src, args.dest, jobs)
-        exef = EXECUTORS[args.output]
-        sys.exit(exef(s, args.jobs))
+        sys.exit(out.run(stream))
 
 
 if __name__ == '__main__':
