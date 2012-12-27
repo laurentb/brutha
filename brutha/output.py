@@ -3,7 +3,7 @@ from __future__ import division
 
 import subprocess
 
-from brutha.util import find_executable
+from brutha.util import require_executable
 
 
 def pbar(cur, total, color=True):
@@ -26,8 +26,8 @@ def pbar(cur, total, color=True):
 # PRINTERS
 
 
-def sh(p, commands, echo=False):
-    p('#!%s' % find_executable('sh', ['bash', 'zsh', 'dash', 'sh']))
+def sh(p, commands, echo=False, jobs=None):
+    p('#!%s' % require_executable('sh', ['bash', 'zsh', 'dash', 'sh']))
     p('set -eu')
     if echo:
         p('set -x')
@@ -40,13 +40,15 @@ def sh(p, commands, echo=False):
         p()
 
 
-def parallel(p, commands, echo=False):
-    p('#!%s --shebang%s --' % (find_executable('parallel'), (' --verbose' if echo else '')))
+def parallel(p, commands, echo=False, jobs=None):
+    verbose = ' --verbose' if echo else ''
+    jobs = ' --jobs %s' % jobs if jobs else ''
+    p('#!%s --shebang%s%s --' % (require_executable('parallel'), jobs, verbose))
     for i, subcommands in enumerate(commands):
         p(" && ".join(subcommands + [pbar(i+1, len(commands))]))
 
 
-def make(p, commands, echo=False):
+def make(p, commands, echo=False, jobs=None):
     prefix = '' if echo else '@'
     targets = ' '.join('d%s' % i for i in xrange(0, len(commands)))
     p('.PHONY: all %s' % targets)
@@ -65,7 +67,7 @@ PRINTERS = {'sh': sh, 'parallel': parallel, 'make': make}
 # EXECUTORS
 
 
-def shebang(stream):
+def shebang(stream, jobs=None):
     """
     Extracts the shebang (#!) line and runs it, with the script provided as stdin.
     This is known to work at least with bash and GNU parallel.
@@ -79,8 +81,13 @@ def shebang(stream):
     return p.returncode
 
 
-def emake(stream):
-    p = subprocess.Popen([find_executable('make', ['gmake', 'make']), '-f', '-'], shell=False, stdin=subprocess.PIPE)
+def emake(stream, jobs=None):
+    if jobs:
+        addon = ['-j', str(jobs)]
+    else:
+        addon = []
+    p = subprocess.Popen([require_executable('make', ['gmake', 'make']), '-f', '-'] + addon,
+                         shell=False, stdin=subprocess.PIPE)
     p.communicate(stream.getvalue())
     return p.returncode
 

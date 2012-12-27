@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 
 
 def escape(x):
@@ -35,4 +36,31 @@ def find_executable(name, names=None):
                 fpath = os.path.join(path, name) + ext
                 if os.path.exists(fpath) and os.access(fpath, os.X_OK):
                     return fpath
+
+
+def require_executable(name, names=None):
+    e = find_executable(name, names)
+    if e:
+        return e
     raise Exception('Could not find executable: %s' % name)
+
+
+def detect_cores():
+    try:
+        import numpy.distutils.cpuinfo
+        return numpy.distutils.cpuinfo.cpuinfo()._getNCPUs()
+    except ImportError:
+        try:
+            with open('/proc/cpuinfo') as f:
+                return len(re.findall('^processor\s+:\s+(\d+)$', f.read(), re.MULTILINE))
+        except IOError:
+            pass
+
+
+def default_output(cores=None):
+    if cores and cores > 1:
+        if find_executable('make', ['gmake', 'make']):
+            return 'make'
+        if find_executable('parallel'):
+            return 'parallel'
+    return 'sh'
