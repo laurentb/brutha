@@ -9,6 +9,10 @@ import mutagen
 from brutha.util import escape
 
 
+class NotAllowed(Exception):
+    pass
+
+
 def mtime(path):
     """
     Get a comparable modification time for a file.
@@ -44,7 +48,7 @@ class File(object):
                 str(i.tm_mon).zfill(2), str(i.tm_mday).zfill(2),
                 str(i.tm_hour).zfill(2), str(i.tm_min).zfill(2),
                 str(i.tm_sec).zfill(2))
-        commands.append("touch -t%s -c -m %s" % (stamp, escape(self.dest())))
+        commands.append('touch -t%s -c -m %s' % (stamp, escape(self.dest())))
 
     def src(self):
         return os.path.join(self.path, self.name)
@@ -95,4 +99,25 @@ class LossyFile(File):
         return commands
 
     def copy(self, commands):
-        commands.append("cp %s %s" % (escape(self.src()), escape(self.dest())))
+        if not self.sample_ok():
+            raise NotAllowed("Sample rate or bit depth too high")
+        commands.append('cp %s %s' % (escape(self.src()), escape(self.dest())))
+
+    def sample_ok(self):
+        if not self.options['lossycheck']:
+            return True
+
+        f = mutagen.File(self.src())
+        try:
+            if self.options['maxrate'] and f.info.sample_rate > self.options['maxrate']:
+                return False
+        except AttributeError:
+            pass
+
+        try:
+            if self.options['maxbits'] and f.info.bits_per_sample > self.options['maxbits']:
+                return False
+        except AttributeError:
+            pass
+
+        return True

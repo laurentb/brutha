@@ -2,6 +2,7 @@
 
 import os
 from brutha.directory import Directory, NotInteresting
+from brutha.file import NotAllowed
 from brutha.util import escape
 
 
@@ -11,7 +12,7 @@ class Tree(object):
         self.path = path
         self.destpath = destpath
         self.options = {'quality': 8, 'gain': False, 'delete': False,
-                        'maxrate': None, 'maxbits': None}
+                        'maxrate': None, 'maxbits': None, 'lossycheck': True}
         if options:
             self.options.update(options)
 
@@ -32,6 +33,9 @@ class Tree(object):
                 wanted.extend(d.wanted())
             except NotInteresting:
                 pass
+            except NotAllowed as e:
+                commands.append(['echo %s' % escape('%s: %s' % (root, str(e)))])
+
         if self.options['delete']:
             c = list(self.delete(wanted))
             if c:

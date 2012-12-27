@@ -27,6 +27,8 @@ def main():
                         help='Maximum sample rate allowed (e.g. 44100)', metavar='RATE')
     parser.add_argument('-B', '--maxbits', type=int,
                         help='Maximum bit depth allowed (e.g. 16)', metavar='BITS')
+    parser.add_argument('-L', '--lossycheck', action='store_true',
+                        help='Ignore lossy files with too high sample rate or bit depth')
     parser.add_argument('-e', '--echo', action='store_true',
                         help='Show started commands')
     parser.add_argument('-x', '--execute', action='store_true',
@@ -39,7 +41,7 @@ def main():
 
     tree = Tree(args.src, args.dest,
                 {'quality': args.quality, 'gain': args.gain, 'delete': args.delete,
-                 'maxrate': args.maxrate, 'maxbits': args.maxbits})
+                 'maxrate': args.maxrate, 'maxbits': args.maxbits, 'lossycheck': args.lossycheck})
     if args.execute:
         s = StringIO()
         p = uprint(s)
