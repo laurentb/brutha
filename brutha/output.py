@@ -3,6 +3,8 @@ from __future__ import division
 
 import subprocess
 
+from brutha.util import find_executable
+
 
 def pbar(cur, total, color=True):
     "Progress bar"
@@ -25,7 +27,7 @@ def pbar(cur, total, color=True):
 
 
 def sh(p, commands, echo=False):
-    p('#!/bin/sh')
+    p('#!%s' % find_executable('sh', ['bash', 'zsh', 'dash', 'sh']))
     p('set -eu')
     if echo:
         p('set -x')
@@ -39,7 +41,7 @@ def sh(p, commands, echo=False):
 
 
 def parallel(p, commands, echo=False):
-    p('#!/usr/bin/parallel --shebang%s --' % (' --verbose' if echo else ''))
+    p('#!%s --shebang%s --' % (find_executable('parallel'), (' --verbose' if echo else '')))
     for i, subcommands in enumerate(commands):
         p(" && ".join(subcommands + [pbar(i+1, len(commands))]))
 
@@ -78,7 +80,7 @@ def shebang(stream):
 
 
 def emake(stream):
-    p = subprocess.Popen(['/usr/bin/make', '-f', '-'], shell=False, stdin=subprocess.PIPE)
+    p = subprocess.Popen([find_executable('make', ['gmake', 'make']), '-f', '-'], shell=False, stdin=subprocess.PIPE)
     p.communicate(stream.getvalue())
     return p.returncode
 
