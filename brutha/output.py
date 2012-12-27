@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
+import subprocess
+
 
 def pbar(cur, total, color=True):
     "Progress bar"
@@ -56,3 +58,29 @@ def make(p, commands, echo=False):
 
 
 PRINTERS = {'sh': sh, 'parallel': parallel, 'make': make}
+
+
+# EXECUTORS
+
+
+def shebang(stream):
+    """
+    Extracts the shebang (#!) line and runs it, with the script provided as stdin.
+    This is known to work at least with bash and GNU parallel.
+    """
+    stream.seek(0)
+    line = stream.readline()
+    assert line.startswith('#!')
+    shebang = line[2:].split()
+    p = subprocess.Popen(shebang, shell=False, stdin=subprocess.PIPE)
+    p.communicate(stream.getvalue())
+    return p.returncode
+
+
+def emake(stream):
+    p = subprocess.Popen(['/usr/bin/make', '-f', '-'], shell=False, stdin=subprocess.PIPE)
+    p.communicate(stream.getvalue())
+    return p.returncode
+
+
+EXECUTORS = {'sh': shebang, 'parallel': shebang, 'make': emake}

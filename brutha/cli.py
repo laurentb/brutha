@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 import argparse
 import sys
+from StringIO import StringIO
 
 from brutha.tree import Tree
 from brutha.util import uprint
-from brutha.output import PRINTERS
+from brutha.output import PRINTERS, EXECUTORS
 
 
 def main():
@@ -25,6 +26,8 @@ def main():
                         help='Maximum bit depth allowed (e.g. 16)', metavar='BITS')
     parser.add_argument('-e', '--echo', action='store_true',
                         help='Show started commands')
+    parser.add_argument('-x', '--execute', action='store_true',
+                        help='Execute the script instead of printing it')
     parser.add_argument('src', help='Source directory', metavar='SOURCE')
     parser.add_argument('dest', help='Destination directory', metavar='DESTINATION')
     args = parser.parse_args()
@@ -32,9 +35,18 @@ def main():
     tree = Tree(args.src, args.dest,
                 {'quality': args.quality, 'gain': args.gain, 'delete': args.delete,
                  'maxrate': args.maxrate, 'maxbits': args.maxbits})
-    p = uprint(sys.stdout)
+    if args.execute:
+        s = StringIO()
+        p = uprint(s)
+    else:
+        p = uprint(sys.stdout)
     outf = PRINTERS[args.output]
     outf(p, tree.commands(), args.echo)
+
+    if args.execute:
+        exef = EXECUTORS[args.output]
+        sys.exit(exef(s))
+
 
 if __name__ == '__main__':
     main()
