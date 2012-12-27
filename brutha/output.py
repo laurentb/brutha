@@ -43,7 +43,7 @@ def sh(p, commands, echo=False, jobs=None):
 def parallel(p, commands, echo=False, jobs=None):
     verbose = ' --verbose' if echo else ''
     jobs = ' --jobs %s' % jobs if jobs else ''
-    p('#!%s --shebang%s%s --' % (require_executable('parallel'), jobs, verbose))
+    p('#!%s --shebang --eta%s%s --' % (require_executable('parallel'), jobs, verbose))
     for i, subcommands in enumerate(commands):
         p(" && ".join(subcommands + [pbar(i+1, len(commands))]))
 
