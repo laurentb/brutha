@@ -14,7 +14,10 @@ setup(
     packages=['brutha'],
     classifiers=[
         'Programming Language :: Python :: 2',
+        'Operating System :: POSIX',
+        'Environment :: Console',
         'License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)',
+        'Topic :: Multimedia :: Sound/Audio :: Conversion',
     ],
     entry_points={'console_scripts': ['brutha = brutha.__main__:main']},
 )
