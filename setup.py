@@ -13,8 +13,8 @@ setup(
     url='http://git.p.engu.in/laurentb/brutha/',
     packages=['brutha'],
     classifiers=[
-        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2',
+        'License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)',
     ],
     entry_points={'console_scripts': ['brutha = brutha.__main__:main']},
 )
