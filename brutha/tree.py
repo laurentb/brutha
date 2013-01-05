@@ -7,7 +7,7 @@ from brutha.util import escape
 
 
 class Tree(object):
-    def __init__(self, path, destpath, options=None):
+    def __init__(self, path, destpath, options=None, log=None):
         assert os.path.isdir(path)
         self.path = path
         self.destpath = destpath
@@ -15,11 +15,16 @@ class Tree(object):
                         'maxrate': None, 'maxbits': None, 'lossycheck': True}
         if options:
             self.options.update(options)
+        self.log = log
 
     def commands(self):
         commands = []
         wanted = []
+        num = 0
         for root, dirs, files in os.walk(self.path, followlinks=True):
+            num += 1
+            if not num % 200:
+                self.progress(num)
             relpath = os.path.relpath(root, self.path)
             if relpath != '.':
                 destpath = os.path.join(self.destpath, relpath)
@@ -52,3 +57,7 @@ class Tree(object):
                 f = os.path.join(root, f)
                 if f not in wanted:
                     yield 'rm -v %s' % escape(f)
+
+    def progress(self, num):
+        if self.log:
+            print >>self.log, "%s directories processed..." % num

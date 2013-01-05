@@ -39,9 +39,12 @@ def main():
     parser.add_argument('dest', help='Destination directory', metavar='DESTINATION')
     args = parser.parse_args()
 
+    log = sys.stderr
     tree = Tree(args.src, args.dest,
                 {'quality': args.quality, 'gain': args.gain, 'delete': args.delete,
-                 'maxrate': args.maxrate, 'maxbits': args.maxbits, 'lossycheck': args.lossycheck})
+                 'maxrate': args.maxrate, 'maxbits': args.maxbits,
+                 'lossycheck': args.lossycheck},
+                log)
     if args.execute:
         stream = StringIO()
     else:
@@ -51,7 +54,7 @@ def main():
     out.write(tree.commands(), stream)
 
     if args.execute:
-        print >>sys.stderr, 'Synchronizing %s to %s, using %s concurrent jobs.' % (args.src, args.dest, jobs)
+        print >>log, 'Synchronizing %s to %s, using %s concurrent jobs.' % (args.src, args.dest, jobs)
         sys.exit(out.run(stream))
 
 
