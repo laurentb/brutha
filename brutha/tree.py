@@ -52,11 +52,11 @@ class Tree(object):
             for d in dirs:
                 d = os.path.normpath(os.path.join(root, d))
                 if d not in wanted:
-                    yield 'rmdir -v %s' % escape(d)
+                    yield 'rmdir %s' % escape(d)
             for f in files:
                 f = os.path.normpath(os.path.join(root, f))
                 if f not in wanted:
-                    yield 'rm -v %s' % escape(f)
+                    yield 'rm %s' % escape(f)
 
     def progress(self, num):
         if self.log:
