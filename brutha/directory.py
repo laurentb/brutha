@@ -43,9 +43,13 @@ class Directory(object):
         return commands
 
     def wanted(self):
-        yield self.destpath
+        d = os.path.normpath(self.destpath)
+        while len(d) > 1:
+            yield d
+            # all parent directories are wanted, too
+            d = os.path.normpath(os.path.join(d, os.path.pardir))
         for f in self.files():
-            yield f.dest()
+            yield os.path.normpath(f.dest())
 
     def files(self):
         flacs = self.flacs()

@@ -50,11 +50,11 @@ class Tree(object):
     def delete(self, wanted):
         for root, dirs, files in os.walk(self.destpath, topdown=False, followlinks=False):
             for d in dirs:
-                d = os.path.join(root, d)
+                d = os.path.normpath(os.path.join(root, d))
                 if d not in wanted:
                     yield 'rmdir -v %s' % escape(d)
             for f in files:
-                f = os.path.join(root, f)
+                f = os.path.normpath(os.path.join(root, f))
                 if f not in wanted:
                     yield 'rm -v %s' % escape(f)
 
