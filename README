@@ -99,9 +99,11 @@ Future
 `brutha` is considered feature-complete.
 Python 3 support is waiting for mutagen.
 
-This might be interesting for some users, but is not planned:
+If you want to help, here are some possibilities:
 
 * Support other formats (currently only FLAC to Ogg Vorbis, with Ogg Vorbis and MP3 as exact copies).
 * Make mutagen optional (only required for frequency / bit depth checks).
+* Port mutagen to Python 3
+* Support downmixing (5.1 to 2.0 for instance)
 
-Contributions are welcome, though.
+Contributions can be sent in the form of git patches, to laurent@bachelier.name.
