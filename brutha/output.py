@@ -85,6 +85,9 @@ class Parallel(Shebang, Output):
 class Make(Output):
     NAME = 'make'
 
+    def _escape(self, line):
+        return line.replace('$', '$$')
+
     def write(self, commands, stream):
         p = uprint(stream)
         prefix = '' if self.echo else '@'
@@ -95,7 +98,7 @@ class Make(Output):
         for i, subcommands in enumerate(commands):
             p('d%s:' % i)
             for subcommand in subcommands:
-                p('\t%s%s' % (prefix, subcommand))
+                p('\t%s%s' % (prefix, self._escape(subcommand)))
             p('\t@%s' % pbar(i+1, len(commands)))
 
     def run(self, stream):
