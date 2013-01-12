@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='brutha',
-    version='0.0.0',
+    version='1.0.0',
     description='Sync FLAC music files to Ogg Vorbis (or keep lossy as-is)',
     long_description=open('README').read(),
     author='Laurent Bachelier',
@@ -14,6 +14,8 @@ setup(
     packages=['brutha'],
     classifiers=[
         'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Operating System :: POSIX',
         'Environment :: Console',
         'License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)',
