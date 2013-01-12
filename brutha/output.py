@@ -19,8 +19,8 @@ def pbar(cur, total, color=True):
     else:
         pct = int(100 * cur / total)
 
-    bar = (int(pct/10) * '#') + (int(10-pct/10) * ' ')
-    return "echo '%s[%s] (%s%%)%s'" % (BRIGHT, bar, pct, NORMAL)
+    bar = int(pct/10) * '#'
+    return "echo '%s[%-10s] (%s%%)%s'" % (BRIGHT, bar, pct, NORMAL)
 
 
 class Output(object):
