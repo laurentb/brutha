@@ -21,6 +21,8 @@ class Tree(object):
         commands = []
         wanted = []
         num = 0
+        if self.log:
+            print >>self.log, "Walking source directory..."
         for root, dirs, files in os.walk(self.path, followlinks=True):
             num += 1
             if not num % 200:
@@ -42,13 +44,19 @@ class Tree(object):
                 commands.append(['echo %s' % escape('%s: %s' % (root, str(e)))])
 
         if self.options['delete']:
+            if self.log:
+                print >>self.log, "Walking destination directory..."
             c = list(self.delete(wanted))
             if c:
                 commands.append(c)
         return commands
 
     def delete(self, wanted):
+        num = 0
         for root, dirs, files in os.walk(self.destpath, topdown=False, followlinks=False):
+            num += 1
+            if not num % 2000:
+                self.progress(num)
             for d in dirs:
                 d = os.path.normpath(os.path.join(root, d))
                 if d not in wanted:
