@@ -92,6 +92,11 @@ This downsamples music to 16/44 as most portable players don't handle
 24/96 well (-R44100 -B16), encodes FLAC to Ogg at a reasonable quality (-q6),
 deletes old unwanted files (-d), and executes the commands right away (-x).
 
+Recommendations
+~~~~~~~~~~~~~~~
+Since encoding eats a lot of CPU, you should start it at a low priority.
+The simplest way is to run ``nice -n19 brutha`` instead of only ``brutha``.
+
 
 Future
 ------
