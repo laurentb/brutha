@@ -5,7 +5,7 @@ from time import localtime
 from datetime import datetime
 
 import mutagen
-from mutagen.flac import FLACNoHeaderError
+from mutagen.flac import FLACNoHeaderError, FLACVorbisError
 
 from brutha.util import escape
 
@@ -80,6 +80,8 @@ class FlacFile(File):
                 f = mutagen.File(self.src())
             except FLACNoHeaderError:
                 raise NotAllowed("Could not read FLAC header")
+            except FLACVorbisError:
+                raise NotAllowed("FLAC Vorbis error")
             if self.options['maxrate'] and f.info.sample_rate > self.options['maxrate']:
                 rate = ' rate -v -L %s dither' % self.options['maxrate']
             if self.options['maxbits'] and f.info.bits_per_sample > self.options['maxbits']:
