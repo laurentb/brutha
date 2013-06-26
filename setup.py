@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='brutha',
-    version='1.0.0',
+    version='1.0.1',
     description='Sync FLAC music files to Ogg Vorbis (or keep lossy as-is)',
     long_description=open('README').read(),
     author='Laurent Bachelier',
