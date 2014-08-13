@@ -4,9 +4,9 @@ import argparse
 import sys
 from StringIO import StringIO
 
-from brutha.tree import Tree
-from brutha.util import detect_cores, default_output
 from brutha.output import OUTPUTS
+from brutha.tree import Tree
+from brutha.util import default_output, detect_cores
 
 
 def main():
@@ -14,29 +14,31 @@ def main():
     output = default_output(cores)
 
     parser = argparse.ArgumentParser(
-        description='Sync FLAC music files to Ogg Vorbis (or keep lossy as-is).')
+        description="Sync FLAC music files to Ogg Vorbis (or keep lossy as-is).",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument('-q', '--quality', default=8, type=int,
-                        help='Ogg Vorbis quality, -1 to 10, default 8')
+                        help="Ogg Vorbis quality, -1 to 10")
     parser.add_argument('-g', '--gain', action='store_true',
-                        help='Compute ReplayGain if missing')
+                        help="Compute ReplayGain if missing")
     parser.add_argument('-d', '--delete', action='store_true',
-                        help='Delete extraneous files in destination')
+                        help="Delete extraneous files in destination")
     parser.add_argument('-o', '--output', default=output, choices=OUTPUTS.keys(),
-                        help='Command list type, default %s' % output)
+                        help="Command list type")
     parser.add_argument('-R', '--maxrate', type=int,
-                        help='Maximum sample rate allowed (e.g. 44100)', metavar='RATE')
+                        help="Maximum sample rate allowed (e.g. 44100)", metavar="RATE")
     parser.add_argument('-B', '--maxbits', type=int,
-                        help='Maximum bit depth allowed (e.g. 16)', metavar='BITS')
+                        help="Maximum bit depth allowed (e.g. 16)", metavar="BITS")
     parser.add_argument('-L', '--lossycheck', action='store_true',
-                        help='Ignore lossy files with too high sample rate or bit depth')
+                        help="Ignore lossy files with too high sample rate or bit depth")
     parser.add_argument('-e', '--echo', action='store_true',
-                        help='Show started commands')
+                        help="Show started commands")
     parser.add_argument('-x', '--execute', action='store_true',
-                        help='Execute the script instead of printing it')
+                        help="Execute the script instead of printing it")
     parser.add_argument('-j', '--jobs', type=int, default=cores,
-                        help='Number of concurrent jobs, default %s' % cores)
-    parser.add_argument('src', help='Source directory', metavar='SOURCE')
-    parser.add_argument('dest', help='Destination directory', metavar='DESTINATION')
+                        help="Number of concurrent jobs")
+    parser.add_argument('src', help="Source directory", metavar='SOURCE')
+    parser.add_argument('dest', help="Destination directory", metavar='DESTINATION')
     args = parser.parse_args()
 
     log = sys.stderr
@@ -54,7 +56,7 @@ def main():
     out.write(tree.commands(), stream)
 
     if args.execute:
-        print >>log, 'Synchronizing %s to %s, using %s concurrent jobs.' % (args.src, args.dest, jobs)
+        print >>log, "Synchronizing %s to %s, using %s concurrent jobs." % (args.src, args.dest, jobs)
         sys.exit(out.run(stream))
 
 
