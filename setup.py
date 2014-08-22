@@ -1,7 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from sys import version_info
+
 from setuptools import setup
+
+assert version_info >= (2, 6)
+requirements = ['mutagen']
+if version_info < (2, 7):
+    requirements.append('argparse')
 
 setup(
     name='brutha',
@@ -12,6 +19,7 @@ setup(
     author_email='laurent@bachelier.name',
     url='http://git.p.engu.in/laurentb/brutha/',
     packages=['brutha'],
+    install_requires=requirements,
     classifiers=[
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
