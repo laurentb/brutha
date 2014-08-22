@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 import re
-from time import localtime
 from datetime import datetime
+from time import localtime
 
 import mutagen
 from mutagen.flac import FLACNoHeaderError, FLACVorbisError
@@ -45,7 +45,8 @@ class File(object):
     def touch(self, commands):
         mtime = os.path.getmtime(self.src())
         i = localtime(mtime)
-        stamp = "%s%s%s%s%s.%s" % (str(i.tm_year).zfill(4),
+        stamp = "%s%s%s%s%s.%s" % (
+                str(i.tm_year).zfill(4),
                 str(i.tm_mon).zfill(2), str(i.tm_mday).zfill(2),
                 str(i.tm_hour).zfill(2), str(i.tm_min).zfill(2),
                 str(i.tm_sec).zfill(2))
