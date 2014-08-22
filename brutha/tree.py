@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 
 import os
-from brutha.directory import Directory, NotInteresting
-from brutha.file import NotAllowed
-from brutha.util import escape
+
+from .directory import Directory, NotInteresting
+from .file import NotAllowed
+from .util import escape
 
 
 class Tree(object):

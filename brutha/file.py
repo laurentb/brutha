@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+
 import os
 import re
 from datetime import datetime
@@ -7,7 +9,7 @@ from time import localtime
 import mutagen
 from mutagen.flac import FLACNoHeaderError, FLACVorbisError
 
-from brutha.util import escape
+from .util import escape
 
 
 class NotAllowed(Exception):

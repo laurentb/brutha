@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+
 import argparse
 import sys
 from StringIO import StringIO
 
-from brutha.output import OUTPUTS
-from brutha.tree import Tree
-from brutha.util import default_output, detect_cores
+from .output import OUTPUTS
+from .tree import Tree
+from .util import default_output, detect_cores
 
 
 def main():

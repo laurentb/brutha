@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+from __future__ import absolute_import, division
 
 import subprocess
 
-from brutha.util import require_executable, uprint
+from .util import require_executable, uprint
 
 
 def pbar(cur, total, color=True):

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 
-import re
 import os
+import re
 
-from brutha.file import FlacFile, LossyFile
-from brutha.util import escape
+from .file import FlacFile, LossyFile
+from .util import escape
 
 
 class NotInteresting(Exception):
