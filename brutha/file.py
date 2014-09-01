@@ -93,8 +93,16 @@ class FlacFile(File):
 
     def transcode(self, commands):
         rate, bits = self.resample()
-        commands.append('sox -V1 %s -C %s%s %s%s' %
-                        (escape(self.src()), self.options['quality'], bits, escape(self.dest()), rate))
+        commands.append(
+            'sox -V1 %(src)s -C %(quality)s%(bits)s %(dest)s%(rate)s' %
+            dict(
+                src=escape(self.src()),
+                quality=self.options['quality'],
+                bits=bits,
+                dest=escape(self.dest()),
+                rate=rate
+            )
+        )
 
 
 class LossyFile(File):
