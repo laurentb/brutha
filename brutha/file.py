@@ -94,7 +94,7 @@ class FlacFile(File):
     def transcode(self, commands):
         rate, bits = self.resample()
         commands.append(
-            'sox -V1 %(src)s -C %(quality)s%(bits)s %(dest)s%(rate)s' %
+            'sox -V1 %(src)s -G -C %(quality)s%(bits)s %(dest)s%(rate)s' %
             dict(
                 src=escape(self.src()),
                 quality=self.options['quality'],
