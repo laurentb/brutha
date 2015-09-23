@@ -30,7 +30,7 @@ To our knowledge, no other solution can fully:
 * handle a huge number of files
 * handle parallel job execution (and not crash)
 * use the proper Ogg Vorbis settings (setting quality and not average bitrate)
-* guarantee usage of the highest resampling algorithms
+* guarantee usage of the highest quality resampling algorithms
 * not be an annoying GUI
 
 To sum up, `brutha` is a music converter tailored to audiophiles,
