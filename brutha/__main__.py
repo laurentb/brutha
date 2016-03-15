@@ -4,8 +4,8 @@ from __future__ import absolute_import
 
 import argparse
 import sys
-from StringIO import StringIO
 from multiprocessing import cpu_count
+from StringIO import StringIO
 
 from .output import OUTPUTS
 from .tree import Tree
@@ -40,6 +40,9 @@ def main():
                         help="Execute the script instead of printing it")
     parser.add_argument('-j', '--jobs', type=int, default=cores,
                         help="Number of concurrent jobs")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-l', '--hardlink', action='store_true', help="Use hardlinks instead of a copy")
+    group.add_argument('-r', '--reflink', action='store_true', help="Use reflinks instead of a copy")
     parser.add_argument('src', help="Source directory", metavar='SOURCE')
     parser.add_argument('dest', help="Destination directory", metavar='DESTINATION')
     args = parser.parse_args()
@@ -48,7 +51,8 @@ def main():
     tree = Tree(args.src, args.dest,
                 {'quality': args.quality, 'gain': args.gain, 'delete': args.delete,
                  'maxrate': args.maxrate, 'maxbits': args.maxbits,
-                 'lossycheck': args.lossycheck},
+                 'lossycheck': args.lossycheck,
+                 'hardlink': args.hardlink, 'reflink': args.reflink},
                 log)
     if args.execute:
         stream = StringIO()

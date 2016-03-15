@@ -14,7 +14,8 @@ class Tree(object):
         self.path = path
         self.destpath = destpath
         self.options = {'quality': 8, 'gain': False, 'delete': False,
-                        'maxrate': None, 'maxbits': None, 'lossycheck': True}
+                        'maxrate': None, 'maxbits': None, 'lossycheck': True,
+                        'hardlink': False, 'reflink': False}
         if options:
             self.options.update(options)
         self.log = log

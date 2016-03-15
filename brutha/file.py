@@ -116,9 +116,15 @@ class LossyFile(File):
         return commands
 
     def copy(self, commands):
+        if self.options['hardlink']:
+            option = ' -l'
+        elif self.options['reflink']:
+            option = ' --reflink=always'
+        else:
+            option = ''
         if not self.sample_ok():
             raise NotAllowed("Sample rate or bit depth too high")
-        commands.append('cp %s %s' % (escape(self.src()), escape(self.dest())))
+        commands.append('cp%s %s %s' % (option, escape(self.src()), escape(self.dest())))
 
     def sample_ok(self):
         if not self.options['lossycheck']:
