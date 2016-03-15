@@ -77,7 +77,7 @@ class Parallel(Shebang, Output):
         p = uprint(stream)
         verbose = ' --verbose' if self.echo else ''
         jobs = ' --jobs %s' % self.jobs if self.jobs else ''
-        p('#!%s --shebang --eta%s%s --' % (require_executable('parallel'), jobs, verbose))
+        p('#!%s --shebang --eta%s%s -- -' % (require_executable('parallel'), jobs, verbose))
         for i, subcommands in enumerate(commands):
             p(" && ".join(subcommands + [pbar(i+1, len(commands))]))
 
