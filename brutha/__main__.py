@@ -5,14 +5,15 @@ from __future__ import absolute_import
 import argparse
 import sys
 from StringIO import StringIO
+from multiprocessing import cpu_count
 
 from .output import OUTPUTS
 from .tree import Tree
-from .util import default_output, detect_cores
+from .util import default_output
 
 
 def main():
-    cores = detect_cores()
+    cores = cpu_count()
     output = default_output(cores)
 
     parser = argparse.ArgumentParser(

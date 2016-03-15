@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 import os
-import re
 
 
 def escape(x):
@@ -44,18 +43,6 @@ def require_executable(name, names=None):
     if e:
         return e
     raise Exception('Could not find executable: %s' % name)
-
-
-def detect_cores():
-    try:
-        import numpy.distutils.cpuinfo
-        return numpy.distutils.cpuinfo.cpuinfo()._getNCPUs()
-    except ImportError:
-        try:
-            with open('/proc/cpuinfo') as f:
-                return len(re.findall('^processor\s+:\s+(\d+)$', f.read(), re.MULTILINE))
-        except IOError:
-            pass
 
 
 def default_output(cores=None):
