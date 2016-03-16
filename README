@@ -60,6 +60,10 @@ Software requirements
 * for parallel runs, either `GNU make <http://www.gnu.org/software/make/make.html>`_
   or `GNU parallel <http://www.gnu.org/software/parallel/>`_, or a similar implementation
 
+Optional :
+
+* `vorbisgain <https://sjeng.org/vorbisgain.html>`_ for ``--gain``
+
 
 Usage
 -----
