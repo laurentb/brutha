@@ -47,8 +47,8 @@ def require_executable(name, names=None):
 
 def default_output(cores=None):
     if cores and cores > 1:
-        if find_executable('make', ['gmake', 'make']):
-            return 'make'
         if find_executable('parallel'):
             return 'parallel'
+        if find_executable('make', ['gmake', 'make']):
+            return 'make'
     return 'sh'
