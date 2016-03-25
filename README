@@ -103,6 +103,28 @@ Since encoding eats a lot of CPU, you should start it at a low priority.
 The simplest way is to run ``nice -n19 brutha`` instead of only ``brutha``.
 
 
+Changes
+-------
+
++ 1.1.0
+
+  - Add sox option to guard against clipping.
+  - Add options to create hardlinks or reflinks.
+  - Make parallel the default if available.
+  - Code and documentation improvements.
+  - Support for newer paraller versions.
+
++ 1.0.2
+
+  - Code improvements.
+  - Show defaults in command-line help.
+
++ 1.0.1
+
+  - Bugfixes.
+
+
+
 Future
 ------
 
