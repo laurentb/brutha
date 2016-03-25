@@ -112,7 +112,7 @@ Changes
   - Add options to create hardlinks or reflinks.
   - Make parallel the default if available.
   - Code and documentation improvements.
-  - Support for newer paraller versions.
+  - Support for newer parallel versions.
 
 + 1.0.2
 
