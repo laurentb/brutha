@@ -23,8 +23,10 @@ class Directory(object):
         self.options = {}
         if options:
             self.options.update(options)
-        self._files = _files or \
-            [f for f in os.listdir(self.path) if not os.path.isdir(os.path.join(self.path, f))]
+        if _files is None:
+            self._files = [f for f in os.listdir(self.path) if not os.path.isdir(os.path.join(self.path, f))]
+        else:
+            self._files = _files
 
     def commands(self):
         commands = []
