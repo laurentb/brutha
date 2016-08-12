@@ -24,7 +24,7 @@ class Directory(object):
         if options:
             self.options.update(options)
         self._files = _files or \
-            [f for f in os.listdir(self.path) if not os.path.isdir(f)]
+            [f for f in os.listdir(self.path) if not os.path.isdir(os.path.join(self.path, f))]
 
     def commands(self):
         commands = []
