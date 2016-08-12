@@ -106,6 +106,10 @@ The simplest way is to run ``nice -n19 brutha`` instead of only ``brutha``.
 Changes
 -------
 
++ 1.1.1
+
+  - Fix some corner cases with directory walking.
+
 + 1.1.0
 
   - Add sox option to guard against clipping.

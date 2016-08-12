@@ -12,7 +12,7 @@ if version_info < (2, 7):
 
 setup(
     name='brutha',
-    version='1.1.0',
+    version='1.1.1',
     description='Sync FLAC music files to Ogg Vorbis (or keep lossy as-is)',
     long_description=open('README').read(),
     author='Laurent Bachelier',
