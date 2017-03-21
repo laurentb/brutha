@@ -40,6 +40,10 @@ def main():
                         help="Execute the script instead of printing it")
     parser.add_argument('-j', '--jobs', type=int, default=cores,
                         help="Number of concurrent jobs")
+    parser.add_argument('-O', '--outside', action='store_true',
+                        help="Follow directory symbolic links outside of the source directory")
+    parser.add_argument('-I', '--inside', action='store_true',
+                        help="Follow directory symbolic links inside of the source directory")
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-l', '--hardlink', action='store_true', help="Use hardlinks instead of a copy")
     group.add_argument('-r', '--reflink', action='store_true', help="Use reflinks instead of a copy")
@@ -52,7 +56,8 @@ def main():
                 {'quality': args.quality, 'gain': args.gain, 'delete': args.delete,
                  'maxrate': args.maxrate, 'maxbits': args.maxbits,
                  'lossycheck': args.lossycheck,
-                 'hardlink': args.hardlink, 'reflink': args.reflink},
+                 'hardlink': args.hardlink, 'reflink': args.reflink,
+                 'inside': args.inside, 'outside': args.outside},
                 log)
     if args.execute:
         stream = StringIO()

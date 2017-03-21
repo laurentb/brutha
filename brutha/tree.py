@@ -15,10 +15,25 @@ class Tree(object):
         self.destpath = destpath
         self.options = {'quality': 8, 'gain': False, 'delete': False,
                         'maxrate': None, 'maxbits': None, 'lossycheck': True,
-                        'hardlink': False, 'reflink': False}
+                        'hardlink': False, 'reflink': False,
+                        'outside': False, 'inside': False}
         if options:
             self.options.update(options)
         self.log = log
+
+    def allowed(self, root, dirname):
+        path = os.path.join(root, dirname)
+        if not os.path.islink(path):
+            return True
+
+        dest = os.path.join(root, os.readlink(path))
+        outside = os.path.relpath(dest, self.path).startswith(os.path.pardir + os.path.sep)
+        if outside and self.options['outside']:
+            return True
+        elif not outside and self.options['inside']:
+            return True
+        else:
+            return False
 
     def commands(self):
         commands = []
@@ -27,6 +42,8 @@ class Tree(object):
         if self.log:
             print >>self.log, "Walking source directory..."
         for root, dirs, files in os.walk(self.path, followlinks=True):
+            for dirname in [dirname for dirname in dirs if not self.allowed(root, dirname)]:
+                dirs.remove(dirname)
             num += 1
             if not num % 200:
                 self.progress(num)

@@ -102,6 +102,12 @@ Recommendations
 Since encoding eats a lot of CPU, you should start it at a low priority.
 The simplest way is to run ``nice -n19 brutha`` instead of only ``brutha``.
 
+Symbolic links
+~~~~~~~~~~~~~~
+brutha ignores symbolic links by default, but can follow links outside of the
+source path, or inside the source path, using options ``--outside`` and ``--inside``.
+
+This is modelled after mpd's ``follow_outside_symlinks`` and ``follow_inside_symlinks`` options.
 
 Changes
 -------
