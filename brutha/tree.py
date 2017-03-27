@@ -57,7 +57,8 @@ class Tree(object):
                 c = d.commands()
                 if c:
                     commands.append(c)
-                wanted.extend(d.wanted())
+                if self.options['delete']:
+                    wanted.extend(d.wanted())
             except NotInteresting:
                 pass
             except NotAllowed as e:
@@ -72,6 +73,7 @@ class Tree(object):
         return commands
 
     def delete(self, wanted):
+        wanted = frozenset(wanted)
         num = 0
         for root, dirs, files in os.walk(self.destpath, topdown=False, followlinks=False):
             num += 1
