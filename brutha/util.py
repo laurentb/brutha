@@ -16,12 +16,6 @@ def escape(x):
     return s
 
 
-def uprint(stream):
-    def p(text='', end='\n'):
-        stream.write(text + end)
-    return p
-
-
 def find_executable(name, names=None):
     envname = '%s_EXECUTABLE' % name.upper()
     if names is None:

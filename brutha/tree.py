@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import os
 
@@ -40,7 +40,7 @@ class Tree(object):
         wanted = []
         num = 0
         if self.log:
-            print >>self.log, "Walking source directory..."
+            print("Walking source directory...", file=self.log)
         for root, dirs, files in os.walk(self.path, followlinks=True):
             for dirname in [dirname for dirname in dirs if not self.allowed(root, dirname)]:
                 dirs.remove(dirname)
@@ -66,7 +66,7 @@ class Tree(object):
 
         if self.options['delete']:
             if self.log:
-                print >>self.log, "Walking destination directory..."
+                print("Walking destination directory...", file=self.log)
             c = list(self.delete(wanted))
             if c:
                 commands.append(c)
@@ -90,4 +90,4 @@ class Tree(object):
 
     def progress(self, num):
         if self.log:
-            print >>self.log, "%s directories processed..." % num
+            print("%s directories processed..." % num, file=self.log)

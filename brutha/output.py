@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division
+from __future__ import absolute_import, division, print_function
 
 import subprocess
 
-from .util import require_executable, uprint
+from .util import require_executable
 
 
 def pbar(cur, total, color=True):
@@ -56,30 +56,28 @@ class Shell(Shebang, Output):
     NAME = 'sh'
 
     def write(self, commands, stream):
-        p = uprint(stream)
-        p('#!%s' % require_executable('sh', ['bash', 'zsh', 'dash', 'sh']))
-        p('set -eu')
+        print('#!%s' % require_executable('sh', ['bash', 'zsh', 'dash', 'sh']), file=stream)
+        print('set -eu', file=stream)
         if self.echo:
-            p('set -x')
+            print('set -x', file=stream)
         for i, subcommands in enumerate(commands):
-            p("\n".join(subcommands))
+            print("\n".join(subcommands), file=stream)
             if self.echo:
-                p('( set +x ; %s ) 2>/dev/null' % pbar(i+1, len(commands)))
+                print('( set +x ; %s ) 2>/dev/null' % pbar(i+1, len(commands)), file=stream)
             else:
-                p(pbar(i+1, len(commands)))
-            p()
+                print(pbar(i+1, len(commands)), file=stream)
+            print(file=stream)
 
 
 class Parallel(Shebang, Output):
     NAME = 'parallel'
 
     def write(self, commands, stream):
-        p = uprint(stream)
         verbose = ' --verbose' if self.echo else ''
         jobs = ' --jobs %s' % self.jobs if self.jobs else ''
-        p('#!%s --shebang --eta%s%s -- -' % (require_executable('parallel'), jobs, verbose))
+        print('#!%s --shebang --eta%s%s -- -' % (require_executable('parallel'), jobs, verbose), file=stream)
         for i, subcommands in enumerate(commands):
-            p(" && ".join(subcommands + [pbar(i+1, len(commands))]))
+            print(" && ".join(subcommands + [pbar(i+1, len(commands))]), file=stream)
 
 
 class Make(Output):
@@ -89,17 +87,16 @@ class Make(Output):
         return line.replace('$', '$$')
 
     def write(self, commands, stream):
-        p = uprint(stream)
         prefix = '' if self.echo else '@'
         targets = ' '.join('d%s' % i for i in xrange(0, len(commands)))
-        p('.PHONY: all %s' % targets)
-        p('all: %s' % targets)
-        p()
+        print('.PHONY: all %s' % targets, file=stream)
+        print('all: %s' % targets, file=stream)
+        print(file=stream)
         for i, subcommands in enumerate(commands):
-            p('d%s:' % i)
+            print('d%s:' % i, file=stream)
             for subcommand in subcommands:
-                p('\t%s%s' % (prefix, self._escape(subcommand)))
-            p('\t@%s' % pbar(i+1, len(commands)))
+                print('\t%s%s' % (prefix, self._escape(subcommand)), file=stream)
+            print('\t@%s' % pbar(i+1, len(commands)), file=stream)
 
     def run(self, stream):
         if self.jobs:

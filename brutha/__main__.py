@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import argparse
 import sys
@@ -68,7 +68,7 @@ def main():
     out.write(tree.commands(), stream)
 
     if args.execute:
-        print >>log, "Synchronizing %s to %s, using %s concurrent jobs." % (args.src, args.dest, jobs)
+        print("Synchronizing %s to %s, using %s concurrent jobs." % (args.src, args.dest, jobs), file=log)
         sys.exit(out.run(stream))
 
 
