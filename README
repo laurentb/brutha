@@ -53,8 +53,7 @@ without issues except lower performance.
 Software requirements
 ~~~~~~~~~~~~~~~~~~~~~
 
-* Python 2 (2.6 or later)
-* python-argparse (or Python 2.7 or later)
+* Python 3 (3.2 or later)
 * `python-mutagen <http://pypi.python.org/pypi/mutagen>`_
 * `sox <http://sox.sourceforge.net/>`_
 * for parallel runs, either `GNU make <http://www.gnu.org/software/make/make.html>`_
@@ -139,13 +138,11 @@ Future
 ------
 
 `brutha` is considered feature-complete.
-Python 3 support is waiting for mutagen.
 
 If you want to help, here are some possibilities:
 
 * Support other formats (currently only FLAC to Ogg Vorbis, with Ogg Vorbis and MP3 as exact copies).
 * Make mutagen optional (only required for frequency / bit depth checks).
-* Port mutagen to Python 3
 * Support downmixing (5.1 to 2.0 for instance)
 
 Contributions can be sent in the form of git patches, to laurent@bachelier.name.
