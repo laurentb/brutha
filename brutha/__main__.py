@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function
-
 import argparse
 import sys
 from multiprocessing import cpu_count
-from StringIO import StringIO
+from io import StringIO
 
 from .output import OUTPUTS
 from .tree import Tree
@@ -26,7 +24,7 @@ def main():
                         help="Compute ReplayGain if missing")
     parser.add_argument('-d', '--delete', action='store_true',
                         help="Delete extraneous files in destination")
-    parser.add_argument('-o', '--output', default=output, choices=OUTPUTS.keys(),
+    parser.add_argument('-o', '--output', default=output, choices=list(OUTPUTS.keys()),
                         help="Command list type")
     parser.add_argument('-R', '--maxrate', type=int,
                         help="Maximum sample rate allowed (e.g. 44100)", metavar="RATE")

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, print_function
-
 import subprocess
 
 from .util import require_executable
@@ -48,7 +46,7 @@ class Shebang(object):
         assert line.startswith('#!')
         shebang = line[2:].split()
         p = subprocess.Popen(shebang, shell=False, stdin=subprocess.PIPE)
-        p.communicate(stream.getvalue())
+        p.communicate(stream.getvalue().encode())
         return p.returncode
 
 
@@ -88,7 +86,7 @@ class Make(Output):
 
     def write(self, commands, stream):
         prefix = '' if self.echo else '@'
-        targets = ' '.join('d%s' % i for i in xrange(0, len(commands)))
+        targets = ' '.join('d%s' % i for i in range(0, len(commands)))
         print('.PHONY: all %s' % targets, file=stream)
         print('all: %s' % targets, file=stream)
         print(file=stream)
@@ -105,7 +103,7 @@ class Make(Output):
             addon = []
         p = subprocess.Popen([require_executable('make', ['gmake', 'make']), '-f', '-'] + addon,
                              shell=False, stdin=subprocess.PIPE)
-        p.communicate(stream.getvalue())
+        p.communicate(stream.getvalue().encode())
         return p.returncode
 
 
